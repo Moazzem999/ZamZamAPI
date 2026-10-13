@@ -7,5 +7,6 @@ namespace ZamZamAPI.Entities.Context
     ICurrentUserService currentUserService) : BaseDbContext(options, currentUserService)
     {
         public DbSet<UserEntity> Users { get; set; }
+        public DbSet<BrandImageEntity> BrandImages { get; set; }
     }
 }
