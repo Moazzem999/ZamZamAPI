@@ -41,9 +41,11 @@ builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+builder.Services.AddScoped<IBrandImagesRepository, BrandImagesRepository>();
 
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
+builder.Services.AddScoped<IBrandImagesService, BrandImagesService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
