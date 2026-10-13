@@ -8,7 +8,7 @@ namespace ZamZamAPI.Repositories.Interfaces
         Task<Result<List<BrandImageResponseDto>>> GetAll();
         Task<Result<BrandImageResponseDto>> GetById(long id);
         Task<Result<long>> Create(BrandImageRequestDto dto);
-        Task<Result<bool>> Update(BrandImageRequestDto dto);
+        Task<Result<BrandImageResponseDto>> Update(BrandImageRequestDto dto);
         Task<Result<bool>> Delete(long id);
     }
 }

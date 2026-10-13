@@ -81,25 +81,25 @@ namespace ZamZamAPI.Repositories
             return await Result<long>.SuccessAsync("Brand image successfully created.", newEntity.Id);
         }
 
-        public async Task<Result<bool>> Update(BrandImageRequestDto dto)
+        public async Task<Result<BrandImageResponseDto>> Update(BrandImageRequestDto dto)
         {
             var maxFileSize = 1024 * 1024; // 1MB
             string[] allowedFileTypes = [".jpg", ".jpeg", ".png"];
 
             if (dto == null || dto.Id <= 0)
             {
-                return await Result<bool>.BadRequestAsync("Invalid request.");
+                return await Result<BrandImageResponseDto>.BadRequestAsync("Invalid request.");
             }
 
             if (string.IsNullOrWhiteSpace(dto.Name))
             {
-                return await Result<bool>.BadRequestAsync("Name cannot be empty.");
+                return await Result<BrandImageResponseDto>.BadRequestAsync("Name cannot be empty.");
             }
 
             var entity = await context.BrandImages.FirstOrDefaultAsync(x => x.Id == dto.Id && x.Status == Status.Active);
             if (entity == null)
             {
-                return await Result<bool>.RecordNotFoundAsync("Brand image not found.");
+                return await Result<BrandImageResponseDto>.RecordNotFoundAsync("Brand image not found.");
             }
 
             entity.Name = dto.Name;
@@ -110,10 +110,10 @@ namespace ZamZamAPI.Repositories
                 var fileType = Path.GetExtension(dto.Image.FileName).ToLower();
 
                 if (dto.Image.Length > maxFileSize)
-                    return await Result<bool>.BadRequestAsync("Image size must be less than 1 MB.");
+                    return await Result<BrandImageResponseDto>.BadRequestAsync("Image size must be less than 1 MB.");
 
                 if (string.IsNullOrEmpty(fileType) || !allowedFileTypes.Contains(fileType))
-                    return await Result<bool>.BadRequestAsync("Invalid file type. Allowed types: .jpg, .jpeg, .png");
+                    return await Result<BrandImageResponseDto>.BadRequestAsync("Invalid file type. Allowed types: .jpg, .jpeg, .png");
 
                 if (!string.IsNullOrEmpty(entity.ImagePath))
                 {
@@ -125,7 +125,7 @@ namespace ZamZamAPI.Repositories
             context.BrandImages.Update(entity);
             await context.SaveChangesAsync();
 
-            return await Result<bool>.SuccessAsync("Brand image successfully updated.", true);
+            return await Result<BrandImageResponseDto>.SuccessAsync("Brand image successfully updated.", MapToDto(entity));
         }
 
         public async Task<Result<bool>> Delete(long id)

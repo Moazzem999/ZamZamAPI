@@ -22,7 +22,7 @@ namespace ZamZamAPI.Services
             return await brandImagesRepository.Create(dto);
         }
 
-        public async Task<Result<bool>> Update(BrandImageRequestDto dto)
+        public async Task<Result<BrandImageResponseDto>> Update(BrandImageRequestDto dto)
         {
             return await brandImagesRepository.Update(dto);
         }
