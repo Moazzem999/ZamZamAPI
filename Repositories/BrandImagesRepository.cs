@@ -141,9 +141,12 @@ namespace ZamZamAPI.Repositories
                 return await Result<bool>.RecordNotFoundAsync("Brand image not found.");
             }
 
-            entity.Status = Status.Deleted;
+            if (!string.IsNullOrEmpty(entity.ImagePath))
+            {
+                Helper.DeleteImage(environment.ContentRootPath, entity.ImagePath);
+            }
 
-            context.BrandImages.Update(entity);
+            context.BrandImages.Remove(entity);
             await context.SaveChangesAsync();
 
             return await Result<bool>.SuccessAsync("Brand image successfully deleted.", true);
