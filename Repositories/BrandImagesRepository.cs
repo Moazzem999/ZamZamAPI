@@ -22,7 +22,7 @@ namespace ZamZamAPI.Repositories
                 .ToListAsync();
 
             var list = data.Select(MapToDto).ToList();
-            return await Result<List<BrandImageResponseDto>>.SuccessAsync(string.Empty, list);
+            return await Result<List<BrandImageResponseDto>>.SuccessAsync("Brand images retrieved successfully.", list);
         }
 
         public async Task<Result<BrandImageResponseDto>> GetById(long id)
@@ -53,19 +53,21 @@ namespace ZamZamAPI.Repositories
                 return await Result<long>.BadRequestAsync("Name cannot be empty.");
             }
 
-            string? imagePath = null;
-            if (dto.Image != null)
+            if (dto.Image == null || dto.Image.Length == 0)
             {
-                var fileType = Path.GetExtension(dto.Image.FileName).ToLower();
-
-                if (dto.Image.Length > maxFileSize)
-                    return await Result<long>.BadRequestAsync("Image size must be less than 1 MB.");
-
-                if (string.IsNullOrEmpty(fileType) || !allowedFileTypes.Contains(fileType))
-                    return await Result<long>.BadRequestAsync("Invalid file type. Allowed types: .jpg, .jpeg, .png");
-
-                imagePath = await Helper.SaveImage(environment.ContentRootPath, dto.Image, "BrandImages");
+                return await Result<long>.BadRequestAsync("Image file is required.");
             }
+
+            string? imagePath = null;
+            var fileType = Path.GetExtension(dto.Image.FileName).ToLower();
+
+            if (dto.Image.Length > maxFileSize)
+                return await Result<long>.BadRequestAsync("Image size must be less than 1 MB.");
+
+            if (string.IsNullOrEmpty(fileType) || !allowedFileTypes.Contains(fileType))
+                return await Result<long>.BadRequestAsync("Invalid file type. Allowed types: .jpg, .jpeg, .png");
+
+            imagePath = await Helper.SaveImage(environment.ContentRootPath, dto.Image, "BrandImages");
 
             var newEntity = new BrandImageEntity
             {
@@ -96,6 +98,11 @@ namespace ZamZamAPI.Repositories
                 return await Result<BrandImageResponseDto>.BadRequestAsync("Name cannot be empty.");
             }
 
+            if (dto.Image == null || dto.Image.Length == 0)
+            {
+                return await Result<BrandImageResponseDto>.BadRequestAsync("Image file is required.");
+            }
+
             var entity = await context.BrandImages.FirstOrDefaultAsync(x => x.Id == dto.Id && x.Status == Status.Active);
             if (entity == null)
             {
@@ -105,22 +112,20 @@ namespace ZamZamAPI.Repositories
             entity.Name = dto.Name;
             entity.Remarks = dto.Remarks ?? string.Empty;
 
-            if (dto.Image != null && dto.Image.Length > 0)
+            var fileType = Path.GetExtension(dto.Image.FileName).ToLower();
+
+            if (dto.Image.Length > maxFileSize)
+                return await Result<BrandImageResponseDto>.BadRequestAsync("Image size must be less than 1 MB.");
+
+            if (string.IsNullOrEmpty(fileType) || !allowedFileTypes.Contains(fileType))
+                return await Result<BrandImageResponseDto>.BadRequestAsync("Invalid file type. Allowed types: .jpg, .jpeg, .png");
+
+            if (!string.IsNullOrEmpty(entity.ImagePath))
             {
-                var fileType = Path.GetExtension(dto.Image.FileName).ToLower();
-
-                if (dto.Image.Length > maxFileSize)
-                    return await Result<BrandImageResponseDto>.BadRequestAsync("Image size must be less than 1 MB.");
-
-                if (string.IsNullOrEmpty(fileType) || !allowedFileTypes.Contains(fileType))
-                    return await Result<BrandImageResponseDto>.BadRequestAsync("Invalid file type. Allowed types: .jpg, .jpeg, .png");
-
-                if (!string.IsNullOrEmpty(entity.ImagePath))
-                {
-                    Helper.DeleteImage(environment.ContentRootPath, entity.ImagePath);
-                }
-                entity.ImagePath = await Helper.SaveImage(environment.ContentRootPath, dto.Image, "BrandImages");
+                Helper.DeleteImage(environment.ContentRootPath, entity.ImagePath);
             }
+
+            entity.ImagePath = await Helper.SaveImage(environment.ContentRootPath, dto.Image, "BrandImages");
 
             context.BrandImages.Update(entity);
             await context.SaveChangesAsync();

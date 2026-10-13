@@ -10,7 +10,6 @@ namespace ZamZamAPI.Controllers
     [ApiController]
     public class BrandImagesController(IBrandImagesService brandImagesService) : ControllerBase
     {
-        [HttpGet]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
