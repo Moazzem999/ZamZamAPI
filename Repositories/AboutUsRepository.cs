@@ -121,7 +121,9 @@ namespace ZamZamAPI.Repositories
                 return await Result<bool>.RecordNotFoundAsync("About us not found.");
             }
 
-            context.AboutUs.Remove(entity);
+            entity.Status = Status.Deleted;
+
+            context.AboutUs.Update(entity);
             await context.SaveChangesAsync();
 
             return await Result<bool>.SuccessAsync("About us successfully deleted.", true);
