@@ -17,6 +17,11 @@ namespace ZamZamAPI.Services
             return await aboutUsRepository.GetById(id);
         }
 
+        public async Task<Result<AboutUsResponseDto>> GetActiveAboutUs()
+        {
+            return await aboutUsRepository.GetActiveAboutUs();
+        }
+
         public async Task<Result<long>> Create(AboutUsRequestDto dto)
         {
             return await aboutUsRepository.Create(dto);

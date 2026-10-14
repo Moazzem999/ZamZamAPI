@@ -36,6 +36,19 @@ namespace ZamZamAPI.Repositories
             return await Result<AboutUsResponseDto>.SuccessAsync("About us retrieved successfully.", MapToDto(entity));
         }
 
+        public async Task<Result<AboutUsResponseDto>> GetActiveAboutUs()
+        {
+            var entity = await context.AboutUs.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Status == Status.Active);
+
+            if (entity == null)
+            {
+                return await Result<AboutUsResponseDto>.RecordNotFoundAsync("About us not found.");
+            }
+
+            return await Result<AboutUsResponseDto>.SuccessAsync("About us retrieved successfully.", MapToDto(entity));
+        }
+
         public async Task<Result<long>> Create(AboutUsRequestDto dto)
         {
             if (dto == null)
