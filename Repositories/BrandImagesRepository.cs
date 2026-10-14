@@ -73,8 +73,7 @@ namespace ZamZamAPI.Repositories
             {
                 Name = dto.Name,
                 Remarks = dto.Remarks ?? string.Empty,
-                ImagePath = imagePath,
-                Status = Status.Active
+                ImagePath = imagePath
             };
 
             context.BrandImages.Add(newEntity);
