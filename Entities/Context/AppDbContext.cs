@@ -9,5 +9,7 @@ namespace ZamZamAPI.Entities.Context
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<BrandImageEntity> BrandImages { get; set; }
         public DbSet<AboutUsEntity> AboutUs { get; set; }
+        public DbSet<EmployeeEntity> Employees { get; set; }
+        public DbSet<LocationHistory> LocationHistories { get; set; }
     }
 }
