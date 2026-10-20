@@ -1,0 +1,15 @@
+﻿using ZamZamAPI.Dtos.Employee;
+using ZamZamAPI.Shared.Infrastructure;
+
+namespace ZamZamAPI.Services.Interfaces
+{
+    public interface IEmployeesService
+    {
+        Task<Result<PagedResult<EmployeeResponseDto>>> GetAll(EmployeeSearchDto searchDto);
+        Task<Result<EmployeeResponseDto>> GetById(long id);
+        Task<Result<List<EmployeeResponseDto>>> GetByName(string name);
+        Task<Result<long>> Create(EmployeeRequestDto dto);
+        Task<Result<EmployeeResponseDto>> Update(EmployeeRequestDto dto);
+        Task<Result<bool>> Delete(long id);
+    }
+}
