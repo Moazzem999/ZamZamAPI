@@ -4,7 +4,7 @@ using ZamZamAPI.Entities.Common;
 namespace ZamZamAPI.Entities
 {
     [Table("LocationHistories")]
-    public class LocationHistory : BaseEntity
+    public class LocationHistoryEntity : BaseEntity
     {
         public long EmployeeId { get; set; }
 
