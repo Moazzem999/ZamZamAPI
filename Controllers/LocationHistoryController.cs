@@ -12,7 +12,7 @@ namespace ZamZamAPI.Controllers
     {
         private readonly ILocationHistoryService locationHistoryService = locationHistoryService;
 
-        [HttpGet("GetAll/{employeeId}")]
+        [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll([FromQuery] LocationHistorySearchDto searchDto)
         {
             var result = await locationHistoryService.GetAll(searchDto);
