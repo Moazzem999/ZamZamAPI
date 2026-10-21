@@ -25,12 +25,5 @@ namespace ZamZamAPI.Controllers
             var result = await locationHistoryService.GetById(id);
             return Ok(result);
         }
-
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] LocationHistoryRequestDto dto)
-        {
-            var result = await locationHistoryService.Create(dto);
-            return Ok(result);
-        }
     }
 }
