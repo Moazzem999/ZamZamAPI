@@ -89,7 +89,12 @@ namespace ZamZamAPI.Repositories
                 return await Result<long>.BadRequestAsync("Employee is required.");
             }
 
-            var employeeExists = await context.Employees.AnyAsync(x => x.Id == dto.EmployeeId && x.Status == Status.Active);
+            var employeeExists = await context.Employees
+                .AnyAsync(x => x.Id == dto.EmployeeId 
+                && x.DateOfBirth == dto.DateOfBirth 
+                && x.Mobile == dto.Mobile 
+                && x.Status == Status.Active);
+
             if (!employeeExists)
             {
                 return await Result<long>.BadRequestAsync("Employee not found.");
