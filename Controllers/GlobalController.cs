@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using ZamZamAPI.Dtos.LocationHistory;
-using ZamZamAPI.Services;
 using ZamZamAPI.Services.Interfaces;
 
 namespace ZamZamAPI.Controllers
@@ -9,7 +8,8 @@ namespace ZamZamAPI.Controllers
     [ApiController]
     public class GlobalController(IBrandImagesService brandImagesService
         , IAboutUsService aboutUsService
-        ,ILocationHistoryService locationHistoryService) : ControllerBase
+        , ILocationHistoryService locationHistoryService
+        , IDropdownService dropdownService) : ControllerBase
     {
         [HttpGet("GetAllBrandImages")]
         public async Task<IActionResult> GetAllBrandImages()
@@ -29,6 +29,13 @@ namespace ZamZamAPI.Controllers
         public async Task<IActionResult> AddLocation([FromBody] LocationHistoryRequestDto dto)
         {
             var result = await locationHistoryService.Create(dto);
+            return Ok(result);
+        }
+
+        [HttpGet("GetAllServiceCategory")]
+        public async Task<IActionResult> GetAllServiceCategory()
+        {
+            var result = await dropdownService.GetAllServiceCategory();
             return Ok(result);
         }
     }
