@@ -18,5 +18,10 @@ namespace ZamZamAPI.Services
         {
             return await dropdownRepository.GetAllReligion();
         }
+
+        public async Task<Result<List<DropdownDto>>> GetAllServiceCategory()
+        {
+            return await dropdownRepository.GetAllServiceCategory();
+        }
     }
 }

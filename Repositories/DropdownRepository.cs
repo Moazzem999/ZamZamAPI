@@ -33,5 +33,18 @@ namespace ZamZamAPI.Repositories
 
             return await Result<List<DropdownDto>>.SuccessAsync("", data);
         }
+
+        public async Task<Result<List<DropdownDto>>> GetAllServiceCategory()
+        {
+            var data = Enum.GetValues<ServiceCategory>()
+                .Select(x => new DropdownDto
+                {
+                    Id = (int)x,
+                    Name = x.GetEnumDescription()
+                })
+                .ToList();
+
+            return await Result<List<DropdownDto>>.SuccessAsync("", data);
+        }
     }
 }

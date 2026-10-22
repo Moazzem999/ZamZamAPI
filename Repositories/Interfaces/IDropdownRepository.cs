@@ -7,5 +7,6 @@ namespace ZamZamAPI.Repositories.Interfaces
     {
         Task<Result<List<DropdownDto>>> GetAllMaritalStatus();
         Task<Result<List<DropdownDto>>> GetAllReligion();
+        Task<Result<List<DropdownDto>>> GetAllServiceCategory();
     }
 }

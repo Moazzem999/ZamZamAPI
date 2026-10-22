@@ -24,5 +24,12 @@ namespace ZamZamAPI.Controllers
             var result = await dropdownService.GetAllReligion();
             return Ok(result);
         }
+
+        [HttpGet("GetAllServiceCategory")]
+        public async Task<IActionResult> GetAllServiceCategory()
+        {
+            var result = await dropdownService.GetAllServiceCategory();
+            return Ok(result);
+        }
     }
 }
