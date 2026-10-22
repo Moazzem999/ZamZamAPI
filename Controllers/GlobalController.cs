@@ -25,17 +25,17 @@ namespace ZamZamAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPost("AddLocation")]
-        public async Task<IActionResult> AddLocation([FromBody] LocationHistoryRequestDto dto)
-        {
-            var result = await locationHistoryService.Create(dto);
-            return Ok(result);
-        }
-
         [HttpGet("GetAllServiceCategory")]
         public async Task<IActionResult> GetAllServiceCategory()
         {
             var result = await dropdownService.GetAllServiceCategory();
+            return Ok(result);
+        }
+
+        [HttpPost("AddLocation")]
+        public async Task<IActionResult> AddLocation([FromBody] LocationHistoryRequestDto dto)
+        {
+            var result = await locationHistoryService.Create(dto);
             return Ok(result);
         }
     }
