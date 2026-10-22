@@ -223,7 +223,7 @@ namespace ZamZamAPI.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("ZamZamAPI.Entities.LocationHistory", b =>
+            modelBuilder.Entity("ZamZamAPI.Entities.LocationHistoryEntity", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -274,6 +274,72 @@ namespace ZamZamAPI.Migrations
                     b.ToTable("LocationHistories");
                 });
 
+            modelBuilder.Entity("ZamZamAPI.Entities.QuotationRequestEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DetailedSpecifications")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("EstimatedQuantity")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ProductReference")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<int>("ServiceCategory")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("QuotationRequests");
+                });
+
             modelBuilder.Entity("ZamZamAPI.Entities.UserEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -316,7 +382,7 @@ namespace ZamZamAPI.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ZamZamAPI.Entities.LocationHistory", b =>
+            modelBuilder.Entity("ZamZamAPI.Entities.LocationHistoryEntity", b =>
                 {
                     b.HasOne("ZamZamAPI.Entities.EmployeeEntity", "Employee")
                         .WithMany()
