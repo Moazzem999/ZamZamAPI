@@ -14,7 +14,7 @@ namespace ZamZamAPI.Entities
         public string Description { get; set; } = string.Empty;
 
         [MaxLength(255)]
-        public string ImagePath { get; set; } = string.Empty;
+        public string? ImagePath { get; set; } = string.Empty;
 
         public int DisplayOrder { get; set; } = 0;
 
