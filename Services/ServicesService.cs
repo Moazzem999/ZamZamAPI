@@ -14,6 +14,11 @@ namespace ZamZamAPI.Services
             return await servicesRepository.GetAll(searchDto);
         }
 
+        public async Task<Result<List<ServiceResponseDto>>> GetAllForDisplay()
+        {
+            return await servicesRepository.GetAllForDisplay();
+        }
+
         public async Task<Result<ServiceResponseDto>> GetById(long id)
         {
             return await servicesRepository.GetById(id);

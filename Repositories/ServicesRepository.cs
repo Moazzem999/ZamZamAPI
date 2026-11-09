@@ -54,6 +54,20 @@ namespace ZamZamAPI.Repositories
             return await Result<PagedResult<ServiceResponseDto>>.SuccessAsync("Services retrieved successfully.", pagedResult);
         }
 
+        public async Task<Result<List<ServiceResponseDto>>> GetAllForDisplay()
+        {
+            var data = await context.Services
+                .AsNoTracking()
+                .Include(x => x.ServiceHighlights)
+                .Where(x => x.Status == Status.Active)
+                .OrderBy(x => x.DisplayOrder)
+                .ThenByDescending(x => x.Id)
+                .ToListAsync();
+
+            var dtoList = data.Select(MapToDto).ToList();
+            return await Result<List<ServiceResponseDto>>.SuccessAsync("Services retrieved successfully.", dtoList);
+        }
+
         public async Task<Result<ServiceResponseDto>> GetById(long id)
         {
             var entity = await context.Services

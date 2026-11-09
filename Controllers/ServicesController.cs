@@ -19,6 +19,14 @@ namespace ZamZamAPI.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
+        [HttpGet("GetAllForDisplay")]
+        public async Task<IActionResult> GetAllForDisplay()
+        {
+            var result = await servicesService.GetAllForDisplay();
+            return Ok(result);
+        }
+
         [HttpGet("GetById/{id}")]
         public async Task<IActionResult> GetById(long id)
         {
