@@ -12,7 +12,6 @@ namespace ZamZamAPI.Controllers
     {
         private readonly IServicesService servicesService = servicesService;
 
-        [AllowAnonymous]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll([FromQuery] ServiceSearchDto searchDto)
         {
@@ -20,7 +19,6 @@ namespace ZamZamAPI.Controllers
             return Ok(result);
         }
 
-        [AllowAnonymous]
         [HttpGet("GetById/{id}")]
         public async Task<IActionResult> GetById(long id)
         {
