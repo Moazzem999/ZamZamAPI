@@ -10,7 +10,7 @@ namespace ZamZamAPI.Dtos.Service
         [MaxLength(50, ErrorMessage = "Title cannot exceed 50 characters.")]
         public string Title { get; set; } = string.Empty;
 
-        [MaxLength(255, ErrorMessage = "Description cannot exceed 255 characters.")]
+        [MaxLength(500, ErrorMessage = "Description cannot exceed 500 characters.")]
         public string Description { get; set; } = string.Empty;
 
         public int DisplayOrder { get; set; } = 0;

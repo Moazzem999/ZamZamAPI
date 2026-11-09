@@ -10,7 +10,7 @@ namespace ZamZamAPI.Entities
         [MaxLength(50)]
         public string Title { get; set; } = string.Empty;
 
-        [MaxLength(255)]
+        [MaxLength(500)]
         public string Description { get; set; } = string.Empty;
 
         [MaxLength(255)]
