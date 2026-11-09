@@ -48,6 +48,7 @@ builder.Services.AddScoped<IEmployeesRepository, EmployeesRepository>();
 builder.Services.AddScoped<ILocationHistoryRepository, LocationHistoryRepository>();
 builder.Services.AddScoped<IDropdownRepository, DropdownRepository>();
 builder.Services.AddScoped<IQuotationRequestRepository, QuotationRequestRepository>();
+builder.Services.AddScoped<IServicesRepository, ServicesRepository>();
 
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
@@ -57,6 +58,7 @@ builder.Services.AddScoped<IEmployeesService, EmployeesService>();
 builder.Services.AddScoped<ILocationHistoryService, LocationHistoryService>();
 builder.Services.AddScoped<IDropdownService, DropdownService>();
 builder.Services.AddScoped<IQuotationRequestService, QuotationRequestService>();
+builder.Services.AddScoped<IServicesService, ServicesService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
