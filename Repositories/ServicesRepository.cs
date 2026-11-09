@@ -42,8 +42,7 @@ namespace ZamZamAPI.Repositories
             var totalCount = await query.CountAsync();
 
             var data = await query
-                .OrderBy(x => x.DisplayOrder)
-                .ThenByDescending(x => x.Id)
+                .OrderByDescending(x => x.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
