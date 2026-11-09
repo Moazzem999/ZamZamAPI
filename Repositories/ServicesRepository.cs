@@ -179,11 +179,6 @@ namespace ZamZamAPI.Repositories
                 return await Result<ServiceResponseDto>.BadRequestAsync("Service description is required.");
             }
 
-            if (dto.Image == null || dto.Image.Length == 0)
-            {
-                return await Result<ServiceResponseDto>.BadRequestAsync("Image file is required.");
-            }
-
             if (dto.DisplayOrder <= 0)
             {
                 return await Result<ServiceResponseDto>.BadRequestAsync("Display order is required.");
