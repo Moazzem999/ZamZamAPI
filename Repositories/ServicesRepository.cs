@@ -90,7 +90,7 @@ namespace ZamZamAPI.Repositories
                 return await Result<long>.BadRequestAsync("Image file is required.");
             }
 
-            if (string.IsNullOrWhiteSpace(dto.DisplayOrder.ToString()))
+            if (dto.DisplayOrder <= 0)
             {
                 return await Result<long>.BadRequestAsync("Display order is required.");
             }
@@ -167,7 +167,7 @@ namespace ZamZamAPI.Repositories
                 return await Result<ServiceResponseDto>.BadRequestAsync("Image file is required.");
             }
 
-            if (string.IsNullOrWhiteSpace(dto.DisplayOrder.ToString()))
+            if (dto.DisplayOrder <= 0)
             {
                 return await Result<ServiceResponseDto>.BadRequestAsync("Display order is required.");
             }
