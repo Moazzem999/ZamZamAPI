@@ -10,10 +10,14 @@ using ZamZamAPI.Shared.Utilities;
 
 namespace ZamZamAPI.Repositories
 {
-    public class ServicesRepository(AppDbContext context, IWebHostEnvironment environment) : IServicesRepository
+    public class ServicesRepository(
+        AppDbContext context,
+        IWebHostEnvironment environment,
+        IHttpContextAccessor httpContextAccessor) : IServicesRepository
     {
         private readonly AppDbContext context = context;
         private readonly IWebHostEnvironment environment = environment;
+        private readonly IHttpContextAccessor httpContextAccessor = httpContextAccessor;
 
         public async Task<Result<PagedResult<ServiceResponseDto>>> GetAll(ServiceSearchDto searchDto)
         {
@@ -289,25 +293,103 @@ namespace ZamZamAPI.Repositories
             return await Result<bool>.SuccessAsync("Service successfully deleted.", true);
         }
 
-        private static void PopulateHighlightsFromDto(ServiceRequestDto dto)
+        private void PopulateHighlightsFromDto(ServiceRequestDto dto)
         {
-            if ((dto.Highlights == null || dto.Highlights.Count == 0) && !string.IsNullOrWhiteSpace(dto.HighlightsJson))
+            // If dto.Highlights already contains valid items with highlight text, nothing to do
+            if (dto.Highlights != null && dto.Highlights.Any(h => !string.IsNullOrWhiteSpace(h.HighlightText)))
+            {
+                return;
+            }
+
+            dto.Highlights ??= new List<ServiceHighlightRequestDto>();
+            dto.Highlights.Clear();
+
+            var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+            // 1. Check HighlightsJson property on DTO
+            if (!string.IsNullOrWhiteSpace(dto.HighlightsJson))
             {
                 try
                 {
-                    var parsed = JsonSerializer.Deserialize<List<ServiceHighlightRequestDto>>(
-                        dto.HighlightsJson,
-                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
-                    );
-
-                    if (parsed != null)
+                    var parsed = JsonSerializer.Deserialize<List<ServiceHighlightRequestDto>>(dto.HighlightsJson, jsonOptions);
+                    if (parsed != null && parsed.Count > 0)
                     {
-                        dto.Highlights = parsed;
+                        dto.Highlights.AddRange(parsed);
+                        return;
                     }
                 }
                 catch
                 {
-                    // Ignore parsing error and proceed with whatever highlights are present
+                    // Ignore parsing error
+                }
+            }
+
+            // 2. Read from multipart form if available (handles Swagger UI array<object> and frontend FormData)
+            var httpContext = httpContextAccessor.HttpContext;
+            if (httpContext != null && httpContext.Request.HasFormContentType)
+            {
+                var form = httpContext.Request.Form;
+
+                // Check "Highlights" or "highlights"
+                var formKey = form.Keys.FirstOrDefault(k => string.Equals(k, "Highlights", StringComparison.OrdinalIgnoreCase));
+                if (!string.IsNullOrEmpty(formKey))
+                {
+                    var values = form[formKey];
+                    foreach (var rawVal in values)
+                    {
+                        if (string.IsNullOrWhiteSpace(rawVal)) continue;
+
+                        var trimmed = rawVal.Trim();
+
+                        // Case A: Full array string "[{...}, {...}]"
+                        if (trimmed.StartsWith('[') && trimmed.EndsWith(']'))
+                        {
+                            try
+                            {
+                                var parsedList = JsonSerializer.Deserialize<List<ServiceHighlightRequestDto>>(trimmed, jsonOptions);
+                                if (parsedList != null)
+                                {
+                                    dto.Highlights.AddRange(parsedList);
+                                }
+                            }
+                            catch { }
+                        }
+                        // Case B: Single JSON object string "{"id": 1, ...}" (sent by Swagger UI for each array item)
+                        else if (trimmed.StartsWith('{') && trimmed.EndsWith('}'))
+                        {
+                            try
+                            {
+                                var parsedItem = JsonSerializer.Deserialize<ServiceHighlightRequestDto>(trimmed, jsonOptions);
+                                if (parsedItem != null)
+                                {
+                                    dto.Highlights.Add(parsedItem);
+                                }
+                            }
+                            catch { }
+                        }
+                    }
+                }
+
+                // If still empty, check form field "HighlightsJson"
+                if (dto.Highlights.Count == 0)
+                {
+                    var jsonKey = form.Keys.FirstOrDefault(k => string.Equals(k, "HighlightsJson", StringComparison.OrdinalIgnoreCase));
+                    if (!string.IsNullOrEmpty(jsonKey))
+                    {
+                        var jsonVal = form[jsonKey].ToString();
+                        if (!string.IsNullOrWhiteSpace(jsonVal))
+                        {
+                            try
+                            {
+                                var parsedList = JsonSerializer.Deserialize<List<ServiceHighlightRequestDto>>(jsonVal, jsonOptions);
+                                if (parsedList != null)
+                                {
+                                    dto.Highlights.AddRange(parsedList);
+                                }
+                            }
+                            catch { }
+                        }
+                    }
                 }
             }
         }
