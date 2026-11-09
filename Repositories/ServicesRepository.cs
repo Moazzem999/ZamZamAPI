@@ -80,6 +80,21 @@ namespace ZamZamAPI.Repositories
                 return await Result<long>.BadRequestAsync("Service title is required.");
             }
 
+            if (string.IsNullOrWhiteSpace(dto.Description))
+            {
+                return await Result<long>.BadRequestAsync("Service description is required.");
+            }
+
+            if (dto.Image == null || dto.Image.Length == 0)
+            {
+                return await Result<long>.BadRequestAsync("Image file is required.");
+            }
+
+            if (string.IsNullOrWhiteSpace(dto.DisplayOrder.ToString()))
+            {
+                return await Result<long>.BadRequestAsync("Display order is required.");
+            }
+
             string imagePath = string.Empty;
             if (dto.Image != null)
             {
@@ -92,10 +107,6 @@ namespace ZamZamAPI.Repositories
                     return await Result<long>.BadRequestAsync("Invalid file type. Allowed types: .jpg, .jpeg, .png");
 
                 imagePath = await Helper.SaveImage(environment.ContentRootPath, dto.Image, "Services");
-            }
-            else if (!string.IsNullOrWhiteSpace(dto.ImagePath))
-            {
-                imagePath = dto.ImagePath.Trim();
             }
 
             var service = new ServiceEntity
@@ -146,6 +157,21 @@ namespace ZamZamAPI.Repositories
                 return await Result<ServiceResponseDto>.BadRequestAsync("Service title is required.");
             }
 
+            if (string.IsNullOrWhiteSpace(dto.Description))
+            {
+                return await Result<ServiceResponseDto>.BadRequestAsync("Service description is required.");
+            }
+
+            if (dto.Image == null || dto.Image.Length == 0)
+            {
+                return await Result<ServiceResponseDto>.BadRequestAsync("Image file is required.");
+            }
+
+            if (string.IsNullOrWhiteSpace(dto.DisplayOrder.ToString()))
+            {
+                return await Result<ServiceResponseDto>.BadRequestAsync("Display order is required.");
+            }
+
             var service = await context.Services
                 .Include(x => x.ServiceHighlights)
                 .FirstOrDefaultAsync(x => x.Id == dto.Id && x.Status == Status.Active);
@@ -171,10 +197,6 @@ namespace ZamZamAPI.Repositories
                 }
 
                 service.ImagePath = await Helper.SaveImage(environment.ContentRootPath, dto.Image, "Services");
-            }
-            else if (!string.IsNullOrWhiteSpace(dto.ImagePath))
-            {
-                service.ImagePath = dto.ImagePath.Trim();
             }
 
             service.Title = dto.Title.Trim();

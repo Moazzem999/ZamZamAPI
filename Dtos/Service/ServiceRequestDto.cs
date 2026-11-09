@@ -17,8 +17,6 @@ namespace ZamZamAPI.Dtos.Service
 
         public IFormFile? Image { get; set; }
 
-        public string? ImagePath { get; set; }
-
         public List<ServiceHighlightRequestDto>? Highlights { get; set; } = new();
 
         public string? HighlightsJson { get; set; }
