@@ -67,6 +67,23 @@ namespace ZamZamAPI.Repositories
             return await Result<MachineryCategoryResponseDto>.SuccessAsync("Machinery category retrieved successfully.", MapToDto(entity));
         }
 
+        public async Task<Result<List<MachineryCategoryResponseDto>>> GetByName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return await Result<List<MachineryCategoryResponseDto>>.SuccessAsync("Machinery categories retrieved successfully.", new List<MachineryCategoryResponseDto>());
+            }
+
+            var searchTerm = name.Trim();
+            var data = await context.MachineryCategories
+                .AsNoTracking()
+                .Where(x => x.Status == Status.Active && x.Name.Contains(searchTerm))
+                .ToListAsync();
+
+            var list = data.Select(MapToDto).ToList();
+            return await Result<List<MachineryCategoryResponseDto>>.SuccessAsync("Machinery categories retrieved successfully.", list);
+        }
+
         public async Task<Result<long>> Create(MachineryCategoryRequestDto dto)
         {
             if (dto == null)

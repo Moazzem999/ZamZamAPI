@@ -24,6 +24,11 @@ namespace ZamZamAPI.Services
             return await machineryCategoryRepository.GetById(id);
         }
 
+        public async Task<Result<List<MachineryCategoryResponseDto>>> GetByName(string name)
+        {
+            return await machineryCategoryRepository.GetByName(name);
+        }
+
         public async Task<Result<long>> Create(MachineryCategoryRequestDto dto)
         {
             return await machineryCategoryRepository.Create(dto);

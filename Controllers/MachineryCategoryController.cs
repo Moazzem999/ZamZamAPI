@@ -34,6 +34,13 @@ namespace ZamZamAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetByName/{name}")]
+        public async Task<IActionResult> GetByName(string name)
+        {
+            var result = await machineryCategoryService.GetByName(name);
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] MachineryCategoryRequestDto dto)
         {
