@@ -124,7 +124,6 @@ namespace ZamZamAPI.Repositories
         public async Task<Result<bool>> Delete(long id)
         {
             var category = await context.MachineryCategories
-                .Include(x => x.Machineries)
                 .FirstOrDefaultAsync(x => x.Id == id && x.Status == Status.Active);
 
             if (category == null)
@@ -132,13 +131,15 @@ namespace ZamZamAPI.Repositories
                 return await Result<bool>.RecordNotFoundAsync("Machinery category not found.");
             }
 
-            category.Status = Status.Deleted;
+            var hasActiveMachineries = await context.Machineries
+                .AnyAsync(m => m.MachineryCategoryId == id && m.Status == Status.Active);
 
-            // Also soft-delete any machineries in this category
-            foreach (var machinery in category.Machineries.Where(m => m.Status == Status.Active))
+            if (hasActiveMachineries)
             {
-                machinery.Status = Status.Deleted;
+                return await Result<bool>.BadRequestAsync("This category cannot be deleted because it has associated machineries. Please delete the machineries first.");
             }
+
+            category.Status = Status.Deleted;
 
             context.MachineryCategories.Update(category);
             await context.SaveChangesAsync();
