@@ -30,8 +30,7 @@ namespace ZamZamAPI.Repositories
             var totalCount = await query.CountAsync();
 
             var data = await query
-                .OrderBy(x => x.DisplayOrder)
-                .ThenByDescending(x => x.Id)
+                .OrderByDescending(x => x.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -48,7 +47,6 @@ namespace ZamZamAPI.Repositories
                 .AsNoTracking()
                 .Where(x => x.Status == Status.Active)
                 .OrderBy(x => x.DisplayOrder)
-                .ThenByDescending(x => x.Id)
                 .ToListAsync();
 
             var dtoList = data.Select(MapToDto).ToList();
@@ -80,8 +78,6 @@ namespace ZamZamAPI.Repositories
             var data = await context.ProductCategories
                 .AsNoTracking()
                 .Where(x => x.Status == Status.Active && x.Name.Contains(searchTerm))
-                .OrderBy(x => x.DisplayOrder)
-                .ThenByDescending(x => x.Id)
                 .ToListAsync();
 
             var list = data.Select(MapToDto).ToList();
