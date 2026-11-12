@@ -18,11 +18,13 @@ namespace ZamZamAPI.Dtos.Product
         [MaxLength(50, ErrorMessage = "Card badge cannot exceed 50 characters.")]
         public string CardBadge { get; set; } = string.Empty;
 
-        [MaxLength(500, ErrorMessage = "Description cannot exceed 500 characters.")]
+        [MaxLength(250, ErrorMessage = "Description cannot exceed 250 characters.")]
         public string Description { get; set; } = string.Empty;
 
-        public IFormFile? Image { get; set; }
+        [MaxLength(250, ErrorMessage = "Technical specs cannot exceed 250 characters.")]
+        public string TechnicalSpecs { get; set; } = string.Empty;
 
+        public IFormFile? Image { get; set; }
         public int DisplayOrder { get; set; } = 0;
     }
 }

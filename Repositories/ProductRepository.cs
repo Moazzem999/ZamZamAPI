@@ -158,6 +158,7 @@ namespace ZamZamAPI.Repositories
                 Title = dto.Title.Trim(),
                 CardBadge = dto.CardBadge?.Trim() ?? string.Empty,
                 Description = dto.Description?.Trim() ?? string.Empty,
+                TechnicalSpecs = dto.TechnicalSpecs?.Trim() ?? string.Empty,
                 ImagePath = imagePath,
                 DisplayOrder = dto.DisplayOrder,
                 Status = Status.Active
@@ -228,6 +229,7 @@ namespace ZamZamAPI.Repositories
             product.Title = dto.Title.Trim();
             product.CardBadge = dto.CardBadge?.Trim() ?? string.Empty;
             product.Description = dto.Description?.Trim() ?? string.Empty;
+            product.TechnicalSpecs = dto.TechnicalSpecs?.Trim() ?? string.Empty;
             product.DisplayOrder = dto.DisplayOrder;
 
             context.Products.Update(product);
@@ -280,6 +282,7 @@ namespace ZamZamAPI.Repositories
                 Title = x.Title,
                 CardBadge = x.CardBadge,
                 Description = x.Description,
+                TechnicalSpecs = x.TechnicalSpecs,
                 ImagePath = x.ImagePath,
                 DisplayOrder = x.DisplayOrder,
                 CreatedOn = x.CreatedOn,

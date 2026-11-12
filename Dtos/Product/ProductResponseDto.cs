@@ -9,6 +9,7 @@ namespace ZamZamAPI.Dtos.Product
         public string Title { get; set; } = string.Empty;
         public string CardBadge { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+        public string TechnicalSpecs { get; set; } = string.Empty;
         public string? ImagePath { get; set; }
         public int DisplayOrder { get; set; }
     }

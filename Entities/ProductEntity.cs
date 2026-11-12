@@ -16,8 +16,12 @@ namespace ZamZamAPI.Entities
         [MaxLength(50)]
         public string CardBadge { get; set; } = string.Empty;
 
-        [MaxLength(500)]
+        [MaxLength(250)]
         public string Description { get; set; } = string.Empty;
+
+
+        [MaxLength(250)]
+        public string TechnicalSpecs { get; set; } = string.Empty;
 
         [MaxLength(255)]
         public string? ImagePath { get; set; } = string.Empty;
