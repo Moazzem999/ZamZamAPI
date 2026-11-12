@@ -19,6 +19,11 @@ namespace ZamZamAPI.Services
             return await productRepository.GetAllForDisplay(categoryId);
         }
 
+        public async Task<Result<List<ProductResponseDto>>> GetAllForDisplay(string searchTerm)
+        {
+            return await productRepository.GetAllForDisplay(searchTerm);
+        }
+
         public async Task<Result<ProductResponseDto>> GetById(long id)
         {
             return await productRepository.GetById(id);

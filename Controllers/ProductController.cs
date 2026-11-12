@@ -27,6 +27,14 @@ namespace ZamZamAPI.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
+        [HttpGet("GetAllForDisplay/Search")]
+        public async Task<IActionResult> GetAllForDisplay([FromQuery] string searchTerm = "")
+        {
+            var result = await productService.GetAllForDisplay(searchTerm);
+            return Ok(result);
+        }
+
         [HttpGet("GetById/{id}")]
         public async Task<IActionResult> GetById(long id)
         {

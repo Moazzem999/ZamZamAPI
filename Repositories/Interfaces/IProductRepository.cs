@@ -7,6 +7,7 @@ namespace ZamZamAPI.Repositories.Interfaces
     {
         Task<Result<PagedResult<ProductResponseDto>>> GetAll(ProductSearchDto searchDto);
         Task<Result<List<ProductResponseDto>>> GetAllForDisplay(long categoryId);
+        Task<Result<List<ProductResponseDto>>> GetAllForDisplay(string searchTerm);
         Task<Result<ProductResponseDto>> GetById(long id);
         Task<Result<long>> Create(ProductRequestDto dto);
         Task<Result<ProductResponseDto>> Update(ProductRequestDto dto);

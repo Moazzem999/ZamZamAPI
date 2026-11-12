@@ -69,6 +69,32 @@ namespace ZamZamAPI.Repositories
             return await Result<List<ProductResponseDto>>.SuccessAsync("Products retrieved successfully.", dtoList);
         }
 
+        public async Task<Result<List<ProductResponseDto>>> GetAllForDisplay(string searchTerm)
+        {
+            var query = context.Products
+                .AsNoTracking()
+                .Include(x => x.ProductCategory)
+                .Where(x => x.Status == Status.Active);
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                var term = searchTerm.Trim();
+                query = query.Where(x =>
+                    x.Title.Contains(term) ||
+                    x.CardBadge.Contains(term) ||
+                    x.Description.Contains(term) ||
+                    (x.ProductCategory != null && x.ProductCategory.Name.Contains(term))
+                );
+            }
+
+            var data = await query
+                .OrderBy(x => x.DisplayOrder)
+                .ToListAsync();
+
+            var dtoList = data.Select(MapToDto).ToList();
+            return await Result<List<ProductResponseDto>>.SuccessAsync("Products retrieved successfully.", dtoList);
+        }
+
         public async Task<Result<ProductResponseDto>> GetById(long id)
         {
             var entity = await context.Products
