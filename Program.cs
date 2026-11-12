@@ -51,6 +51,8 @@ builder.Services.AddScoped<IQuotationRequestRepository, QuotationRequestReposito
 builder.Services.AddScoped<IServicesRepository, ServicesRepository>();
 builder.Services.AddScoped<IMachineryCategoryRepository, MachineryCategoryRepository>();
 builder.Services.AddScoped<IMachineryRepository, MachineryRepository>();
+builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
@@ -63,6 +65,8 @@ builder.Services.AddScoped<IQuotationRequestService, QuotationRequestService>();
 builder.Services.AddScoped<IServicesService, ServicesService>();
 builder.Services.AddScoped<IMachineryCategoryService, MachineryCategoryService>();
 builder.Services.AddScoped<IMachineryService, MachineryService>();
+builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
