@@ -16,5 +16,7 @@ namespace ZamZamAPI.Entities.Context
         public DbSet<ServiceHighlightEntity> ServiceHighlights { get; set; }
         public DbSet<MachineryCategoryEntity> MachineryCategories { get; set; }
         public DbSet<MachineryEntity> Machineries { get; set; }
+        public DbSet<ProductCategoryEntity> ProductCategories { get; set; }
+        public DbSet<ProductEntity> Products { get; set; }
     }
 }
