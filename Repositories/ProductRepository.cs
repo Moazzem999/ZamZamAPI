@@ -31,6 +31,7 @@ namespace ZamZamAPI.Repositories
                     x.Title.Contains(searchTerm) ||
                     x.CardBadge.Contains(searchTerm) ||
                     x.Description.Contains(searchTerm) ||
+                    x.TechnicalSpecs.Contains(searchTerm) ||
                     (x.ProductCategory != null && x.ProductCategory.Name.Contains(searchTerm))
                 );
             }
@@ -83,6 +84,7 @@ namespace ZamZamAPI.Repositories
                     x.Title.Contains(term) ||
                     x.CardBadge.Contains(term) ||
                     x.Description.Contains(term) ||
+                    x.TechnicalSpecs.Contains(term) ||
                     (x.ProductCategory != null && x.ProductCategory.Name.Contains(term))
                 );
             }
