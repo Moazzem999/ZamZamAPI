@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
@@ -99,6 +99,7 @@ namespace ZamZamAPI.Repositories
                 Email = dto.Email,
                 UserName = dto.UserName,
                 Password = passwordHash,
+                EmployeeId = dto.EmployeeId,
                 CreatedOn = DateTime.Now,
                 UpdatedOn = DateTime.Now,
                 Status = Status.Active
