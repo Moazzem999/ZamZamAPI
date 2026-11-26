@@ -52,5 +52,6 @@ namespace ZamZamAPI.Entities
 
         // Navigation Property
         public virtual UserEntity? User { get; set; }
+        public ICollection<EmployeeTaskEntity> EmployeeTasks { get; set; } = new List<EmployeeTaskEntity>();
     }
 }

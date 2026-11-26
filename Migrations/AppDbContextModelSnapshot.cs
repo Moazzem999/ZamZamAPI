@@ -281,6 +281,51 @@ namespace ZamZamAPI.Migrations
                     b.ToTable("Employees");
                 });
 
+            modelBuilder.Entity("ZamZamAPI.Entities.EmployeeTaskEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<long>("EmployeeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("ScheduledOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("EmployeeTasks");
+                });
+
             modelBuilder.Entity("ZamZamAPI.Entities.LocationHistoryEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -795,6 +840,17 @@ namespace ZamZamAPI.Migrations
                     b.ToTable("UserRoleMappings");
                 });
 
+            modelBuilder.Entity("ZamZamAPI.Entities.EmployeeTaskEntity", b =>
+                {
+                    b.HasOne("ZamZamAPI.Entities.EmployeeEntity", "Employee")
+                        .WithMany("EmployeeTasks")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
             modelBuilder.Entity("ZamZamAPI.Entities.LocationHistoryEntity", b =>
                 {
                     b.HasOne("ZamZamAPI.Entities.EmployeeEntity", "Employee")
@@ -869,6 +925,8 @@ namespace ZamZamAPI.Migrations
 
             modelBuilder.Entity("ZamZamAPI.Entities.EmployeeEntity", b =>
                 {
+                    b.Navigation("EmployeeTasks");
+
                     b.Navigation("User");
                 });
 

@@ -12,6 +12,7 @@ namespace ZamZamAPI.Entities.Context
         public DbSet<BrandImageEntity> BrandImages { get; set; }
         public DbSet<AboutUsEntity> AboutUs { get; set; }
         public DbSet<EmployeeEntity> Employees { get; set; }
+        public DbSet<EmployeeTaskEntity> EmployeeTasks { get; set; }
         public DbSet<LocationHistoryEntity> LocationHistories { get; set; }
         public DbSet<QuotationRequestEntity> QuotationRequests { get; set; }
         public DbSet<ServiceEntity> Services { get; set; }
