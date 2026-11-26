@@ -19,13 +19,6 @@ namespace ZamZamAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet("GetAllByEmployeeId/{employeeId}")]
-        public async Task<IActionResult> GetAllByEmployeeId(long employeeId, [FromQuery] EmployeeTaskSearchDto searchDto)
-        {
-            var result = await employeeTaskService.GetAllByEmployeeId(employeeId, searchDto);
-            return Ok(result);
-        }
-
         [HttpGet("GetById/{id}")]
         public async Task<IActionResult> GetById(long id)
         {

@@ -14,11 +14,6 @@ namespace ZamZamAPI.Services
             return await employeeTaskRepository.GetAll(searchDto);
         }
 
-        public async Task<Result<PagedResult<EmployeeTaskResponseDto>>> GetAllByEmployeeId(long employeeId, EmployeeTaskSearchDto searchDto)
-        {
-            return await employeeTaskRepository.GetAllByEmployeeId(employeeId, searchDto);
-        }
-
         public async Task<Result<EmployeeTaskResponseDto>> GetById(long id)
         {
             return await employeeTaskRepository.GetById(id);

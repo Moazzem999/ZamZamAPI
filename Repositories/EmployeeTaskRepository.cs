@@ -21,14 +21,10 @@ namespace ZamZamAPI.Repositories
                 .Include(x => x.Employee)
                 .Where(x => x.Status == Status.Active);
 
-            return await GetPagedTasks(query, searchDto);
-        }
-
-        public async Task<Result<PagedResult<EmployeeTaskResponseDto>>> GetAllByEmployeeId(long employeeId, EmployeeTaskSearchDto searchDto)
-        {
-            var query = context.EmployeeTasks.AsNoTracking()
-                .Include(x => x.Employee)
-                .Where(x => x.Status == Status.Active && x.EmployeeId == employeeId);
+            if (string.Equals(currentUserService.RoleName, "Employee", StringComparison.OrdinalIgnoreCase))
+            {
+                query = query.Where(x => x.EmployeeId == currentUserService.EmployeeId);
+            }
 
             return await GetPagedTasks(query, searchDto);
         }
