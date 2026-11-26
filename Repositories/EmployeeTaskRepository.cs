@@ -164,6 +164,7 @@ namespace ZamZamAPI.Repositories
                 Id = x.Id,
                 EmployeeId = x.EmployeeId,
                 EmployeeName = x.Employee?.Name ?? string.Empty,
+                ImagePath = x.Employee?.ImagePath,
                 Title = x.Title,
                 Description = x.Description,
                 ScheduledOn = x.ScheduledOn,
