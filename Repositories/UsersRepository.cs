@@ -136,7 +136,7 @@ namespace ZamZamAPI.Repositories
         public async Task<Result<LoginResponseDto>> Login(LoginRequestDto dto)
         {
             var user = await context.Users
-                .FirstOrDefaultAsync(u => u.UserName == dto.UserName && u.Status == Status.Active);
+                .FirstOrDefaultAsync(u => (u.UserName == dto.UserName || u.Email == dto.UserName) && u.Status == Status.Active);
 
             if (user == null || !Helper.VerifyPassword(dto.Password, user.Password))
                 return await Result<LoginResponseDto>.ErrorAsync($"Please provide valid credentials.", (int)HttpStatusCode.Unauthorized);
