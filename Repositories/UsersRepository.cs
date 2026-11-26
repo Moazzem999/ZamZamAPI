@@ -164,7 +164,8 @@ namespace ZamZamAPI.Repositories
                     Name = user.Name,
                     Email = user.Email,
                     RoleId = roleId,
-                    RoleName = roleName
+                    RoleName = roleName,
+                    EmployeeId = user.EmployeeId
                 }
             };
 
@@ -192,6 +193,11 @@ namespace ZamZamAPI.Repositories
             if (!string.IsNullOrWhiteSpace(roleName))
             {
                 claims.Add(new Claim("RoleName", roleName));
+            }
+
+            if (user.EmployeeId.HasValue)
+            {
+                claims.Add(new Claim("EmployeeId", user.EmployeeId.Value.ToString()));
             }
 
             var token = new JwtSecurityToken(

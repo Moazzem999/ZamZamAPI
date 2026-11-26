@@ -7,5 +7,6 @@ namespace ZamZamAPI.Dtos.User
         public string Email { get; set; } = string.Empty;
         public long? RoleId { get; set; }
         public string? RoleName { get; set; }
+        public long? EmployeeId { get; set; }
     }
 }
