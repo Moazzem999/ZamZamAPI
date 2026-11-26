@@ -136,13 +136,23 @@ namespace ZamZamAPI.Repositories
         public async Task<Result<LoginResponseDto>> Login(LoginRequestDto dto)
         {
             var user = await context.Users
+                .Include(u => u.UserRoleMappings.Where(m => m.Status == Status.Active))
+                    .ThenInclude(m => m.Role)
                 .FirstOrDefaultAsync(u => (u.UserName == dto.UserName || u.Email == dto.UserName) && u.Status == Status.Active);
 
             if (user == null || !Helper.VerifyPassword(dto.Password, user.Password))
                 return await Result<LoginResponseDto>.ErrorAsync($"Please provide valid credentials.", (int)HttpStatusCode.Unauthorized);
 
+            var activeRole = user.UserRoleMappings
+                .Where(m => m.Role != null && m.Role.Status == Status.Active)
+                .Select(m => m.Role)
+                .FirstOrDefault();
+
+            long? roleId = activeRole?.Id;
+            string? roleName = activeRole?.Name;
+
             // Generate JWT
-            var token = GenerateJwtToken(user);
+            var token = GenerateJwtToken(user, roleId, roleName);
 
             var response = new LoginResponseDto
             {
@@ -152,25 +162,37 @@ namespace ZamZamAPI.Repositories
                 {
                     Id = user.Id,
                     Name = user.Name,
-                    Email = user.Email
+                    Email = user.Email,
+                    RoleId = roleId,
+                    RoleName = roleName
                 }
             };
 
             return await Result<LoginResponseDto>.SuccessAsync("", response);
         }
 
-        private string GenerateJwtToken(UserEntity user)
+        private string GenerateJwtToken(UserEntity user, long? roleId, string? roleName)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]!));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[]
+            var claims = new List<Claim>
             {
                 new Claim("UserId", user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName ?? user.Name),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
+
+            if (roleId.HasValue)
+            {
+                claims.Add(new Claim("RoleId", roleId.Value.ToString()));
+            }
+
+            if (!string.IsNullOrWhiteSpace(roleName))
+            {
+                claims.Add(new Claim("RoleName", roleName));
+            }
 
             var token = new JwtSecurityToken(
                 issuer: config["Jwt:Issuer"],
