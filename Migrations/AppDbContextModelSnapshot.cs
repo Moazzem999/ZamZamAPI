@@ -726,6 +726,9 @@ namespace ZamZamAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long?>("EmployeeId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -746,6 +749,10 @@ namespace ZamZamAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId")
+                        .IsUnique()
+                        .HasFilter("[EmployeeId] IS NOT NULL");
 
                     b.ToTable("Users");
                 });
@@ -832,6 +839,15 @@ namespace ZamZamAPI.Migrations
                     b.Navigation("Service");
                 });
 
+            modelBuilder.Entity("ZamZamAPI.Entities.UserEntity", b =>
+                {
+                    b.HasOne("ZamZamAPI.Entities.EmployeeEntity", "Employee")
+                        .WithOne("User")
+                        .HasForeignKey("ZamZamAPI.Entities.UserEntity", "EmployeeId");
+
+                    b.Navigation("Employee");
+                });
+
             modelBuilder.Entity("ZamZamAPI.Entities.UserRoleMappingEntity", b =>
                 {
                     b.HasOne("ZamZamAPI.Entities.RoleEntity", "Role")
@@ -848,6 +864,11 @@ namespace ZamZamAPI.Migrations
 
                     b.Navigation("Role");
 
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ZamZamAPI.Entities.EmployeeEntity", b =>
+                {
                     b.Navigation("User");
                 });
 

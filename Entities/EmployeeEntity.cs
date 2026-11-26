@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using ZamZamAPI.Entities.Common;
 using ZamZamAPI.Shared.Enum;
@@ -49,5 +49,8 @@ namespace ZamZamAPI.Entities
 
         [MaxLength(255)]
         public string? NidImagePath { get; set; }
+
+        // Navigation Property
+        public virtual UserEntity? User { get; set; }
     }
 }
