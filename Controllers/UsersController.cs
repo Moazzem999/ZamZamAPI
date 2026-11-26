@@ -23,5 +23,12 @@ namespace ZamZamAPI.Controllers
             var data = await userService.Create(dto);
             return Ok(data);
         }
+
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDto dto)
+        {
+            var result = await userService.ChangePassword(dto);
+            return Ok(result);
+        }
     }
 }

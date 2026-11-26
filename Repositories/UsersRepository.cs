@@ -1,23 +1,68 @@
-﻿using ZamZamAPI.Dtos.User;
-using ZamZamAPI.Entities;
-using ZamZamAPI.Entities.Context;
-using ZamZamAPI.Repositories.Interfaces;
-using ZamZamAPI.Shared.Enum;
-using ZamZamAPI.Shared.Infrastructure;
-using ZamZamAPI.Shared.Utilities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
+using ZamZamAPI.Dtos.User;
+using ZamZamAPI.Entities;
+using ZamZamAPI.Entities.Context;
+using ZamZamAPI.Repositories.Interfaces;
+using ZamZamAPI.Shared.Enum;
+using ZamZamAPI.Shared.Infrastructure;
+using ZamZamAPI.Shared.Services;
+using ZamZamAPI.Shared.Utilities;
 
 namespace ZamZamAPI.Repositories
 {
-    public class UsersRepository(AppDbContext context, IConfiguration config) : IUsersRepository
+    public class UsersRepository(AppDbContext context, IConfiguration config, ICurrentUserService currentUserService) : IUsersRepository
     {
         private readonly AppDbContext context = context;
         private readonly IConfiguration config = config;
+        private readonly ICurrentUserService currentUserService = currentUserService;
+
+        public async Task<Result<bool>> ChangePassword(ChangePasswordRequestDto dto)
+        {
+            if (dto is null)
+                return await Result<bool>.BadRequestAsync("Invalid request.");
+
+            var currentPassword = dto.CurrentPassword;
+            if (string.IsNullOrWhiteSpace(currentPassword))
+                return await Result<bool>.BadRequestAsync("Current password can not be empty.");
+
+            if (string.IsNullOrWhiteSpace(dto.NewPassword))
+                return await Result<bool>.BadRequestAsync("New password can not be empty.");
+
+            if (dto.NewPassword.Length < 6)
+                return await Result<bool>.BadRequestAsync("New password must be at least 6 characters long.");
+
+            var confirmPassword = dto.ConfirmPassword;
+            if (!string.IsNullOrWhiteSpace(confirmPassword) && dto.NewPassword != confirmPassword)
+                return await Result<bool>.BadRequestAsync("New password and confirm password do not match.");
+
+            if (currentPassword == dto.NewPassword)
+                return await Result<bool>.BadRequestAsync("New password cannot be the same as current password.");
+
+            long targetUserId = currentUserService.UserId;
+
+            if (targetUserId <= 0)
+                return await Result<bool>.BadRequestAsync("User not identified.");
+
+            var user = await context.Users
+                .FirstOrDefaultAsync(u => u.Id == targetUserId && u.Status == Status.Active);
+
+            if (user is null)
+                return await Result<bool>.RecordNotFoundAsync("User not found.");
+
+            if (!Helper.VerifyPassword(currentPassword, user.Password))
+                return await Result<bool>.BadRequestAsync("Current password is incorrect.");
+
+            user.Password = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
+
+            await context.SaveChangesAsync();
+
+            return await Result<bool>.SuccessAsync("Password changed successfully.", true);
+        }
 
         public async Task<Result<long>> Create(UserRequestDto dto)
         {

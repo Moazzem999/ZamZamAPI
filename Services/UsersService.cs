@@ -21,5 +21,10 @@ namespace ZamZamAPI.Services
         {
             return await usersRepository.Login(dto);
         }
+
+        public async Task<Result<bool>> ChangePassword(ChangePasswordRequestDto dto)
+        {
+            return await usersRepository.ChangePassword(dto);
+        }
     }
 }
