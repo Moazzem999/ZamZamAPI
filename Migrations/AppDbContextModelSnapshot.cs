@@ -585,6 +585,43 @@ namespace ZamZamAPI.Migrations
                     b.ToTable("QuotationRequests");
                 });
 
+            modelBuilder.Entity("ZamZamAPI.Entities.RoleEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
             modelBuilder.Entity("ZamZamAPI.Entities.ServiceEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -713,6 +750,44 @@ namespace ZamZamAPI.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("ZamZamAPI.Entities.UserRoleMappingEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("RoleId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserRoleMappings");
+                });
+
             modelBuilder.Entity("ZamZamAPI.Entities.LocationHistoryEntity", b =>
                 {
                     b.HasOne("ZamZamAPI.Entities.EmployeeEntity", "Employee")
@@ -757,6 +832,25 @@ namespace ZamZamAPI.Migrations
                     b.Navigation("Service");
                 });
 
+            modelBuilder.Entity("ZamZamAPI.Entities.UserRoleMappingEntity", b =>
+                {
+                    b.HasOne("ZamZamAPI.Entities.RoleEntity", "Role")
+                        .WithMany("UserRoleMappings")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ZamZamAPI.Entities.UserEntity", "User")
+                        .WithMany("UserRoleMappings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ZamZamAPI.Entities.MachineryCategoryEntity", b =>
                 {
                     b.Navigation("Machineries");
@@ -767,9 +861,19 @@ namespace ZamZamAPI.Migrations
                     b.Navigation("Products");
                 });
 
+            modelBuilder.Entity("ZamZamAPI.Entities.RoleEntity", b =>
+                {
+                    b.Navigation("UserRoleMappings");
+                });
+
             modelBuilder.Entity("ZamZamAPI.Entities.ServiceEntity", b =>
                 {
                     b.Navigation("ServiceHighlights");
+                });
+
+            modelBuilder.Entity("ZamZamAPI.Entities.UserEntity", b =>
+                {
+                    b.Navigation("UserRoleMappings");
                 });
 #pragma warning restore 612, 618
         }

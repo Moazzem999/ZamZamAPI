@@ -1,4 +1,4 @@
-﻿using ZamZamAPI.Entities.Common;
+using ZamZamAPI.Entities.Common;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZamZamAPI.Entities
@@ -10,5 +10,8 @@ namespace ZamZamAPI.Entities
         public string Email { get; set; } = string.Empty;
         public string? UserName { get; set; }
         public string? Password { get; set; }
+
+        // Navigation Property
+        public ICollection<UserRoleMappingEntity> UserRoleMappings { get; set; } = new List<UserRoleMappingEntity>();
     }
 }
