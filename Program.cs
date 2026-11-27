@@ -58,6 +58,7 @@ builder.Services.AddScoped<IContactInquiryRepository, ContactInquiryRepository>(
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IUserRoleMappingRepository, UserRoleMappingRepository>();
 builder.Services.AddScoped<ISecurityManuRepository, SecurityManuRepository>();
+builder.Services.AddScoped<ISecurityRolePermissionRepository, SecurityRolePermissionRepository>();
 
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
@@ -77,6 +78,7 @@ builder.Services.AddScoped<IContactInquiryService, ContactInquiryService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserRoleMappingService, UserRoleMappingService>();
 builder.Services.AddScoped<ISecurityManuService, SecurityManuService>();
+builder.Services.AddScoped<ISecurityRolePermissionService, SecurityRolePermissionService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
