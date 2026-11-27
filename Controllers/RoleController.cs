@@ -19,6 +19,13 @@ namespace ZamZamAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetAllRoles")]
+        public async Task<IActionResult> GetAllRoles()
+        {
+            var result = await roleService.GetAllRoles();
+            return Ok(result);
+        }
+
         [HttpGet("GetById/{id}")]
         public async Task<IActionResult> GetById(long id)
         {

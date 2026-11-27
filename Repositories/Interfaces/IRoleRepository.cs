@@ -6,6 +6,7 @@ namespace ZamZamAPI.Repositories.Interfaces
     public interface IRoleRepository
     {
         Task<Result<PagedResult<RoleResponseDto>>> GetAll(RoleSearchDto searchDto);
+        Task<Result<List<RoleResponseDto>>> GetAllRoles();
         Task<Result<RoleResponseDto>> GetById(long id);
         Task<Result<long>> Create(RoleRequestDto dto);
         Task<Result<RoleResponseDto>> Update(RoleRequestDto dto);

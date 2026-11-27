@@ -14,6 +14,11 @@ namespace ZamZamAPI.Services
             return await roleRepository.GetAll(searchDto);
         }
 
+        public async Task<Result<List<RoleResponseDto>>> GetAllRoles()
+        {
+            return await roleRepository.GetAllRoles();
+        }
+
         public async Task<Result<RoleResponseDto>> GetById(long id)
         {
             return await roleRepository.GetById(id);

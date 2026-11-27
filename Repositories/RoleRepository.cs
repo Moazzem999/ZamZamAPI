@@ -43,6 +43,17 @@ namespace ZamZamAPI.Repositories
             return await Result<PagedResult<RoleResponseDto>>.SuccessAsync("Roles retrieved successfully.", pagedResult);
         }
 
+        public async Task<Result<List<RoleResponseDto>>> GetAllRoles()
+        {
+            var data = await context.Roles.AsNoTracking()
+                .Where(x => x.Status == Status.Active)
+                .OrderBy(x => x.Name)
+                .ToListAsync();
+
+            var roles = data.Select(MapToDto).ToList();
+            return await Result<List<RoleResponseDto>>.SuccessAsync("Roles retrieved successfully.", roles);
+        }
+
         public async Task<Result<RoleResponseDto>> GetById(long id)
         {
             var entity = await context.Roles.AsNoTracking()
