@@ -55,6 +55,7 @@ builder.Services.AddScoped<IMachineryRepository, MachineryRepository>();
 builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IContactInquiryRepository, ContactInquiryRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
@@ -71,6 +72,7 @@ builder.Services.AddScoped<IMachineryService, MachineryService>();
 builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IContactInquiryService, ContactInquiryService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
