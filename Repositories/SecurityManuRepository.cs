@@ -47,6 +47,18 @@ namespace ZamZamAPI.Repositories
             return await Result<PagedResult<SecurityManuResponseDto>>.SuccessAsync("Security menus retrieved successfully.", pagedResult);
         }
 
+        public async Task<Result<List<SecurityManuResponseDto>>> GetAllParentMenu()
+        {
+            var data = await context.SecurityManus.AsNoTracking()
+                .Where(x => x.Status == Status.Active && x.ParentManuId == null)
+                .OrderBy(x => x.Sort ?? int.MaxValue)
+                .ThenBy(x => x.ManuName)
+                .ToListAsync();
+
+            var parentMenus = data.Select(MapToDto).ToList();
+            return await Result<List<SecurityManuResponseDto>>.SuccessAsync("Parent security menus retrieved successfully.", parentMenus);
+        }
+
         public async Task<Result<SecurityManuResponseDto>> GetById(long id)
         {
             var entity = await context.SecurityManus.AsNoTracking()
