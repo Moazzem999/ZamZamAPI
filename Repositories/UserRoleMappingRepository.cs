@@ -84,11 +84,11 @@ namespace ZamZamAPI.Repositories
             }
 
             var mappingExists = await context.UserRoleMappings.AsNoTracking()
-                .AnyAsync(x => x.Status == Status.Active && x.UserId == dto.UserId && x.RoleId == dto.RoleId);
+                .AnyAsync(x => x.Status == Status.Active && x.UserId == dto.UserId);
 
             if (mappingExists)
             {
-                return await Result<long>.RecordAlreadyExistAsync("User role mapping already exists.");
+                return await Result<long>.RecordAlreadyExistAsync("User already has a role assigned.");
             }
 
             var newEntity = new UserRoleMappingEntity
@@ -135,11 +135,11 @@ namespace ZamZamAPI.Repositories
             }
 
             var mappingExists = await context.UserRoleMappings.AsNoTracking()
-                .AnyAsync(x => x.Id != dto.Id && x.Status == Status.Active && x.UserId == dto.UserId && x.RoleId == dto.RoleId);
+                .AnyAsync(x => x.Id != dto.Id && x.Status == Status.Active && x.UserId == dto.UserId);
 
             if (mappingExists)
             {
-                return await Result<UserRoleMappingResponseDto>.RecordAlreadyExistAsync("User role mapping already exists.");
+                return await Result<UserRoleMappingResponseDto>.RecordAlreadyExistAsync("User already has a role assigned.");
             }
 
             entity.UserId = dto.UserId;
