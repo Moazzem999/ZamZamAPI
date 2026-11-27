@@ -14,9 +14,9 @@ namespace ZamZamAPI.Services
             return await securityManuRepository.GetAll(searchDto);
         }
 
-        public async Task<Result<List<SecurityManuResponseDto>>> GetAllParentMenu()
+        public async Task<Result<List<SecurityManuResponseDto>>> GetAllParentMenus()
         {
-            return await securityManuRepository.GetAllParentMenu();
+            return await securityManuRepository.GetAllParentMenus();
         }
 
         public async Task<Result<List<SecurityManuResponseDto>>> GetAllSecurityManus()

@@ -47,7 +47,7 @@ namespace ZamZamAPI.Repositories
             return await Result<PagedResult<SecurityManuResponseDto>>.SuccessAsync("Security menus retrieved successfully.", pagedResult);
         }
 
-        public async Task<Result<List<SecurityManuResponseDto>>> GetAllParentMenu()
+        public async Task<Result<List<SecurityManuResponseDto>>> GetAllParentMenus()
         {
             var data = await context.SecurityManus.AsNoTracking()
                 .Where(x => x.Status == Status.Active && x.ParentManuId == null)
