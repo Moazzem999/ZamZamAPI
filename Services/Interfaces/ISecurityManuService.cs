@@ -7,6 +7,7 @@ namespace ZamZamAPI.Services.Interfaces
     {
         Task<Result<PagedResult<SecurityManuResponseDto>>> GetAll(SecurityManuSearchDto searchDto);
         Task<Result<List<SecurityManuResponseDto>>> GetAllParentMenu();
+        Task<Result<List<SecurityManuResponseDto>>> GetAllSecurityManus();
         Task<Result<SecurityManuResponseDto>> GetById(long id);
         Task<Result<long>> Create(SecurityManuRequestDto dto);
         Task<Result<SecurityManuResponseDto>> Update(SecurityManuRequestDto dto);

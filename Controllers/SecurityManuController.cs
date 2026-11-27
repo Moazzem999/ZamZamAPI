@@ -26,6 +26,13 @@ namespace ZamZamAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetAllSecurityManus")]
+        public async Task<IActionResult> GetAllSecurityManus()
+        {
+            var result = await securityManuService.GetAllSecurityManus();
+            return Ok(result);
+        }
+
         [HttpGet("GetById/{id}")]
         public async Task<IActionResult> GetById(long id)
         {
