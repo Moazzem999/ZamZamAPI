@@ -667,6 +667,112 @@ namespace ZamZamAPI.Migrations
                     b.ToTable("Roles");
                 });
 
+            modelBuilder.Entity("ZamZamAPI.Entities.SecurityManuEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("ActionName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ControllerName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Icon")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ManuName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<long?>("ParentManuId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("Sort")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentManuId");
+
+                    b.ToTable("SecurityManus");
+                });
+
+            modelBuilder.Entity("ZamZamAPI.Entities.SecurityRolePermissionEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsInsert")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsModify")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsReport")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsView")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("RoleId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SecurityManuId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("SecurityManuId");
+
+                    b.ToTable("SecurityRolePermissions");
+                });
+
             modelBuilder.Entity("ZamZamAPI.Entities.ServiceEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -884,6 +990,34 @@ namespace ZamZamAPI.Migrations
                     b.Navigation("ProductCategory");
                 });
 
+            modelBuilder.Entity("ZamZamAPI.Entities.SecurityManuEntity", b =>
+                {
+                    b.HasOne("ZamZamAPI.Entities.SecurityManuEntity", "ParentManu")
+                        .WithMany("ChildManus")
+                        .HasForeignKey("ParentManuId");
+
+                    b.Navigation("ParentManu");
+                });
+
+            modelBuilder.Entity("ZamZamAPI.Entities.SecurityRolePermissionEntity", b =>
+                {
+                    b.HasOne("ZamZamAPI.Entities.RoleEntity", "Role")
+                        .WithMany("RolePermissions")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ZamZamAPI.Entities.SecurityManuEntity", "SecurityManu")
+                        .WithMany("RolePermissions")
+                        .HasForeignKey("SecurityManuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("SecurityManu");
+                });
+
             modelBuilder.Entity("ZamZamAPI.Entities.ServiceHighlightEntity", b =>
                 {
                     b.HasOne("ZamZamAPI.Entities.ServiceEntity", "Service")
@@ -942,7 +1076,16 @@ namespace ZamZamAPI.Migrations
 
             modelBuilder.Entity("ZamZamAPI.Entities.RoleEntity", b =>
                 {
+                    b.Navigation("RolePermissions");
+
                     b.Navigation("UserRoleMappings");
+                });
+
+            modelBuilder.Entity("ZamZamAPI.Entities.SecurityManuEntity", b =>
+                {
+                    b.Navigation("ChildManus");
+
+                    b.Navigation("RolePermissions");
                 });
 
             modelBuilder.Entity("ZamZamAPI.Entities.ServiceEntity", b =>

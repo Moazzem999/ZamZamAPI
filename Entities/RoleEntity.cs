@@ -13,7 +13,8 @@ namespace ZamZamAPI.Entities
         [MaxLength(250)]
         public string? Description { get; set; }
 
-        // Navigation Property
+        // Navigation Properties
         public ICollection<UserRoleMappingEntity> UserRoleMappings { get; set; } = new List<UserRoleMappingEntity>();
+        public ICollection<SecurityRolePermissionEntity> RolePermissions { get; set; } = new List<SecurityRolePermissionEntity>();
     }
 }
