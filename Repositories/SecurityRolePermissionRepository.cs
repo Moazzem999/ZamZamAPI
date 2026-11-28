@@ -39,6 +39,25 @@ namespace ZamZamAPI.Repositories
             return await Result<List<SecurityRolePermissionResponseDto>>.SuccessAsync("Security role permissions retrieved successfully.", permissions);
         }
 
+        public async Task<Result<List<SecurityRolePermissionResponseDto>>> GetAllByRoleId(long roleId)
+        {
+            if (roleId <= 0)
+            {
+                return await Result<List<SecurityRolePermissionResponseDto>>.BadRequestAsync("Valid RoleId is required.");
+            }
+
+            var data = await context.SecurityRolePermissions.AsNoTracking()
+                .Include(x => x.Role)
+                .Include(x => x.SecurityManu)
+                .Where(x => x.Status == Status.Active && x.RoleId == roleId)
+                .OrderBy(x => x.SecurityManu.Sort ?? int.MaxValue)
+                .ThenBy(x => x.SecurityManuId)
+                .ToListAsync();
+
+            var permissions = data.Select(MapToDto).ToList();
+            return await Result<List<SecurityRolePermissionResponseDto>>.SuccessAsync("Security role permissions retrieved successfully.", permissions);
+        }
+
         public async Task<Result<List<long>>> Create(List<SecurityRolePermissionRequestDto> dtos)
         {
             if (dtos == null || dtos.Count == 0)

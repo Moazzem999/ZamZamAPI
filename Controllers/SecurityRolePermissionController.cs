@@ -19,6 +19,13 @@ namespace ZamZamAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetAllByRoleId/{roleId}")]
+        public async Task<IActionResult> GetAllByRoleId(long roleId)
+        {
+            var result = await securityRolePermissionService.GetAllByRoleId(roleId);
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] List<SecurityRolePermissionRequestDto> dtos)
         {

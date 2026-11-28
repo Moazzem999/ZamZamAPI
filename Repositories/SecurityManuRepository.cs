@@ -50,7 +50,7 @@ namespace ZamZamAPI.Repositories
         public async Task<Result<List<SecurityManuResponseDto>>> GetAllParentMenus()
         {
             var data = await context.SecurityManus.AsNoTracking()
-                .Where(x => x.Status == Status.Active && x.ParentManuId == null)
+                .Where(x => x.Status == Status.Active && (x.ParentManuId == null || x.ParentManuId == 0))
                 .OrderBy(x => x.Sort ?? int.MaxValue)
                 .ThenBy(x => x.ManuName)
                 .ToListAsync();

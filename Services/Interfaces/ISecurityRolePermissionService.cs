@@ -6,6 +6,7 @@ namespace ZamZamAPI.Services.Interfaces
     public interface ISecurityRolePermissionService
     {
         Task<Result<List<SecurityRolePermissionResponseDto>>> GetAll(SecurityRolePermissionSearchDto searchDto);
+        Task<Result<List<SecurityRolePermissionResponseDto>>> GetAllByRoleId(long roleId);
         Task<Result<List<long>>> Create(List<SecurityRolePermissionRequestDto> dtos);
         Task<Result<List<SecurityRolePermissionResponseDto>>> Update(List<SecurityRolePermissionRequestDto> dtos);
     }

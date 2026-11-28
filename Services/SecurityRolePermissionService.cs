@@ -14,6 +14,11 @@ namespace ZamZamAPI.Services
             return await securityRolePermissionRepository.GetAll(searchDto);
         }
 
+        public async Task<Result<List<SecurityRolePermissionResponseDto>>> GetAllByRoleId(long roleId)
+        {
+            return await securityRolePermissionRepository.GetAllByRoleId(roleId);
+        }
+
         public async Task<Result<List<long>>> Create(List<SecurityRolePermissionRequestDto> dtos)
         {
             return await securityRolePermissionRepository.Create(dtos);
