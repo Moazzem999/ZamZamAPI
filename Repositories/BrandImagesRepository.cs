@@ -40,9 +40,6 @@ namespace ZamZamAPI.Repositories
 
         public async Task<Result<long>> Create(BrandImageRequestDto dto)
         {
-            var maxFileSize = 1024 * 1024; // 1MB
-            string[] allowedFileTypes = [".jpg", ".jpeg", ".png"];
-
             if (dto == null)
             {
                 return await Result<long>.BadRequestAsync("Invalid request.");
@@ -58,16 +55,13 @@ namespace ZamZamAPI.Repositories
                 return await Result<long>.BadRequestAsync("Image file is required.");
             }
 
-            string? imagePath = null;
-            var fileType = Path.GetExtension(dto.Image.FileName).ToLower();
+            var imageValidationError = ValidateImage(dto.Image);
+            if (imageValidationError != null)
+            {
+                return await Result<long>.BadRequestAsync(imageValidationError);
+            }
 
-            if (dto.Image.Length > maxFileSize)
-                return await Result<long>.BadRequestAsync("Image size must be less than 1 MB.");
-
-            if (string.IsNullOrEmpty(fileType) || !allowedFileTypes.Contains(fileType))
-                return await Result<long>.BadRequestAsync("Invalid file type. Allowed types: .jpg, .jpeg, .png");
-
-            imagePath = await Helper.SaveImage(environment.ContentRootPath, dto.Image, "BrandImages");
+            var imagePath = await Helper.SaveImage(environment.ContentRootPath, dto.Image, "BrandImages");
 
             var newEntity = new BrandImageEntity
             {
@@ -84,9 +78,6 @@ namespace ZamZamAPI.Repositories
 
         public async Task<Result<BrandImageResponseDto>> Update(BrandImageRequestDto dto)
         {
-            var maxFileSize = 1024 * 1024; // 1MB
-            string[] allowedFileTypes = [".jpg", ".jpeg", ".png"];
-
             if (dto == null || dto.Id <= 0)
             {
                 return await Result<BrandImageResponseDto>.BadRequestAsync("Invalid request.");
@@ -97,9 +88,13 @@ namespace ZamZamAPI.Repositories
                 return await Result<BrandImageResponseDto>.BadRequestAsync("Name cannot be empty.");
             }
 
-            if (dto.Image == null || dto.Image.Length == 0)
+            if (dto.Image != null && dto.Image.Length > 0)
             {
-                return await Result<BrandImageResponseDto>.BadRequestAsync("Image file is required.");
+                var imageValidationError = ValidateImage(dto.Image);
+                if (imageValidationError != null)
+                {
+                    return await Result<BrandImageResponseDto>.BadRequestAsync(imageValidationError);
+                }
             }
 
             var entity = await context.BrandImages.FirstOrDefaultAsync(x => x.Id == dto.Id && x.Status == Status.Active);
@@ -111,25 +106,39 @@ namespace ZamZamAPI.Repositories
             entity.Name = dto.Name;
             entity.Remarks = dto.Remarks ?? string.Empty;
 
-            var fileType = Path.GetExtension(dto.Image.FileName).ToLower();
-
-            if (dto.Image.Length > maxFileSize)
-                return await Result<BrandImageResponseDto>.BadRequestAsync("Image size must be less than 1 MB.");
-
-            if (string.IsNullOrEmpty(fileType) || !allowedFileTypes.Contains(fileType))
-                return await Result<BrandImageResponseDto>.BadRequestAsync("Invalid file type. Allowed types: .jpg, .jpeg, .png");
-
-            if (!string.IsNullOrEmpty(entity.ImagePath))
+            if (dto.Image != null && dto.Image.Length > 0)
             {
-                Helper.DeleteImage(environment.ContentRootPath, entity.ImagePath);
-            }
+                if (!string.IsNullOrEmpty(entity.ImagePath))
+                {
+                    Helper.DeleteImage(environment.ContentRootPath, entity.ImagePath);
+                }
 
-            entity.ImagePath = await Helper.SaveImage(environment.ContentRootPath, dto.Image, "BrandImages");
+                entity.ImagePath = await Helper.SaveImage(environment.ContentRootPath, dto.Image, "BrandImages");
+            }
 
             context.BrandImages.Update(entity);
             await context.SaveChangesAsync();
 
             return await Result<BrandImageResponseDto>.SuccessAsync("Brand image successfully updated.", MapToDto(entity));
+        }
+
+        private static string? ValidateImage(IFormFile image)
+        {
+            const int maxFileSize = 1024 * 1024; // 1MB
+            string[] allowedFileTypes = [".jpg", ".jpeg", ".png"];
+
+            if (image.Length > maxFileSize)
+            {
+                return "Image size must be less than 1 MB.";
+            }
+
+            var fileType = Path.GetExtension(image.FileName).ToLower();
+            if (string.IsNullOrEmpty(fileType) || !allowedFileTypes.Contains(fileType))
+            {
+                return "Invalid file type. Allowed types: .jpg, .jpeg, .png";
+            }
+
+            return null;
         }
 
         public async Task<Result<bool>> Delete(long id)
