@@ -36,7 +36,6 @@ namespace ZamZamAPI.Repositories
 
             var data = await query
                 .OrderBy(x => x.Sort ?? int.MaxValue)
-                .ThenBy(x => x.ManuName)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -52,7 +51,6 @@ namespace ZamZamAPI.Repositories
             var data = await context.SecurityManus.AsNoTracking()
                 .Where(x => x.Status == Status.Active && (x.ParentManuId == null || x.ParentManuId == 0))
                 .OrderBy(x => x.Sort ?? int.MaxValue)
-                .ThenBy(x => x.ManuName)
                 .ToListAsync();
 
             var parentMenus = data.Select(MapToDto).ToList();
@@ -65,7 +63,6 @@ namespace ZamZamAPI.Repositories
                 .Include(x => x.ParentManu)
                 .Where(x => x.Status == Status.Active)
                 .OrderBy(x => x.Sort ?? int.MaxValue)
-                .ThenBy(x => x.ManuName)
                 .ToListAsync();
 
             var manus = data.Select(MapToDto).ToList();
