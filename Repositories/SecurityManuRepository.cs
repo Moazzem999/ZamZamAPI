@@ -36,7 +36,7 @@ namespace ZamZamAPI.Repositories
 
             var data = await query
                 .OrderBy(x => x.Sort ?? int.MaxValue)
-                .ThenByDescending(x => x.Id)
+                .ThenBy(x => x.ManuName)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
